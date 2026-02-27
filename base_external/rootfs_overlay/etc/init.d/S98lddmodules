@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# script gets installed to /etc/init.d
+# scull and module load/unload scripts will also be installed here
+
+# Get the directory of the script and define paths
+DIR=$(dirname "$(readlink -f "$0")")
+SCULL_PATH="/lib/modules/scull.ko"
+FAULTY_PATH="/lib/modules/faulty.ko"
+SCULL_DEV="/dev/scull"
+SCULL_MAJOR=0
+
+case "$1" in
+    start)
+        ./$(DIR)/scull_load.sh
+        ./$(DIR)/module_load.sh faulty
+        modprobe hello
+        ;;
+    stop)
+        rmmod hello
+        ./%(DIR)/module_unload.sh faulty
+        ./$(DIR)/scull_unload.sh
+        ;;
+    restart)
+        echo "Restarting..."
+        $0 stop
+        sleep 1
+        $0 start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+exit 0
