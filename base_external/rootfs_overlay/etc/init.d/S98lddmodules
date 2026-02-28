@@ -5,21 +5,17 @@
 
 # Get the directory of the script and define paths
 DIR=$(dirname "$(readlink -f "$0")")
-SCULL_PATH="/lib/modules/scull.ko"
-FAULTY_PATH="/lib/modules/faulty.ko"
-SCULL_DEV="/dev/scull"
-SCULL_MAJOR=0
+MODULE_PATH="/lib/modules/$(uname -r)/extra/"
 
 case "$1" in
     start)
-        ./$(DIR)/scull_load.sh
-        ./$(DIR)/module_load.sh faulty
+        cd ${MODULE_PATH} && ${DIR}/scull_load && ${DIR}/module_load faulty
         modprobe hello
         ;;
     stop)
         rmmod hello
-        ./%(DIR)/module_unload.sh faulty
-        ./$(DIR)/scull_unload.sh
+        ${DIR}/module_unload faulty
+        ${DIR}/scull_unload
         ;;
     restart)
         echo "Restarting..."
