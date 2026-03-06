@@ -1,0 +1,6 @@
+#!/bin/sh
+
+module=aesdchar
+
+rmmod $module
+rm -f /dev/${module}

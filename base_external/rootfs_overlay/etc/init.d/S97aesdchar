@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# script gets installed to /etc/init.d
+# aesdchar load/unload scripts will also be installed here
+
+# Get the directory of the script and define paths
+DIR=$(dirname "$(readlink -f "$0")")
+
+case "$1" in
+    start)
+        echo "Resolve dependancies"
+        depmod -a
+        echo "Loading aesdchar"
+        ${DIR}/aesdchar_load
+        ;;
+    stop)
+        echo "Unloading aesdchar"
+        ${DIR}/aesdchar_unload
+        ;;
+    restart)
+        echo "Restarting..."
+        $0 stop
+        sleep 1
+        $0 start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+exit 0
