@@ -3,10 +3,12 @@
 
 module=aesdchar
 
-modprobe ${module} || exit 1
+MODULE_PATH="/lib/modules/$(uname -r)/extra/"
+
+insmod ${MODULE_PATH}/${module}.ko || exit 1
 
 major=$(awk "\$2==\"$module\" {print \$1}" /proc/devices)
 rm -f /dev/${module}
 mknod /dev/${module} c $major 0
-chgrp sudo /dev/${module}
+chgrp wheel /dev/${module}
 chmod 664 /dev/${module}
