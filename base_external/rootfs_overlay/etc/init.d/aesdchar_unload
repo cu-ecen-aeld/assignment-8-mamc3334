@@ -2,5 +2,5 @@
 
 module=aesdchar
 
-rmmod $module
+rmmod -f $module
 rm -f /dev/${module}
