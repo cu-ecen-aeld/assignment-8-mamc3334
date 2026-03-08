@@ -8,8 +8,8 @@ DIR=$(dirname "$(readlink -f "$0")")
 
 case "$1" in
     start)
-        echo "Resolve dependancies"
-        depmod -a
+        echo "Unload aesdchar if already laoded"
+        ${DIR}/aesdchar_unload || true
         echo "Loading aesdchar"
         ${DIR}/aesdchar_load
         ;;
